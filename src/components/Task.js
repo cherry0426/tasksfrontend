@@ -14,15 +14,16 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+
 export default function Task() {
   const paperStyle = {padding:'50px 50px', width:600, margin:'10px auto'}
   const classes = useStyles();
   const[task_description,setName]=useState('')
-  const[created_date,setDate]=useState('')
+  const[deadline,setDate]=useState('')
   const[tasks,setTasks]=useState([])
   const handleClick=(e)=>{
     e.preventDefault()
-    const task={task_description  ,created_date}
+    const task={task_description  ,deadline}
     console.log(task)
     fetch("http://localhost:8080/activity/add",{
       method:"POST",
@@ -32,6 +33,7 @@ export default function Task() {
   }).then(()=>{
     console.log("New Task added")
   })
+  window.location.reload(); 
 }
 
 useEffect(()=>{
@@ -43,18 +45,20 @@ useEffect(()=>{
 )
 },[])
 
+
   return (
 
     <Container>
     <Paper elevation={3} style ={paperStyle}>  
      <form className={classes.root} noValidate autoComplete="off">
+
       <h1 style={{color:"blue"}}>Add Task</h1>
       <TextField id="standard-basic" label="Add Task" variant="outlined" fullWidth
       value={task_description}
       onChange={(e)=>setName(e.target.value)}
       />
       <TextField id="date" label="" type='datetime-local' variant="outlined" fullWidth
-      value={created_date}
+      value={deadline}
       onChange={(e)=>setDate(e.target.value)}/>
       <div>
       <Button color="primary" variant="contained" endIcon={<SendIcon />} onClick={handleClick}>
@@ -69,8 +73,8 @@ useEffect(()=>{
     <Paper elevation={3} style={paperStyle}>
       {tasks.map(task=>(
         <Paper elevation={6} style={{margin:"10px",padding:"15px", textAlign:"left"}} key={task.id}>
-         Task:{task.task_description}<br/>
-         Deadline:{task.created_date}
+         Task   :{task.task_description}<br/>
+         Deadline :{task.deadline}
         </Paper>
       ))
 }
